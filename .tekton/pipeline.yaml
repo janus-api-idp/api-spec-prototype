@@ -2,3 +2,30 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: openapi-spec
+
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: openapi-spec
+spec:
+  resources:
+    - name: source-repo
+      type: git
+  tasks:
+    - name: clone-repo
+      taskRef:
+        name: git-clone
+      resources:
+        inputs:
+          - name: url
+            resource: source-repo
+    - name: run-spectral
+      taskRef:
+        name: spectral-task
+      resources:
+        inputs:
+          - name: source-repo
+            resource: source-repo
+        params:
+          - name: rules
+            value: .spectral.yaml

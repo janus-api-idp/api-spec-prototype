@@ -2,3 +2,27 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   name: spectral-quaility-gate
+spec:
+  inputs:
+    resources:
+      - name: source-repo
+        type: git
+    params:
+      - name: rules
+        type: string
+  steps:
+    - name: spectral
+      image: quay.io/maximilianb/spectral:latest
+      workingDir: /workspace/source-repo
+      command:
+        - spectral
+      args:
+        - lint
+        - --ruleset
+        - /workspace/.spectral.yaml
+      volumeMounts:
+        - name: workspace
+          mountPath: /workspace
+  volumes:
+    - name: workspace
+      emptyDir: {}

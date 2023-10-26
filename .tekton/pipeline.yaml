@@ -28,4 +28,4 @@ spec:
             resource: source-repo
         params:
           - name: rules
-            value: .spectral.yaml
+            value: /workspace/.spectral.yaml

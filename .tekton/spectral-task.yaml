@@ -3,23 +3,26 @@ kind: Task
 metadata:
   name: spectral-quaility-gate
 spec:
-  inputs:
-    resources:
-      - name: source-repo
-        type: git
-    params:
-      - name: rules
-        type: string
+  params:
+  - name: RULES_PATH
+    description: Path to the spectral rules for validation
+  - name: API_PATH
+    description: Path to the api to validate
+  - name: IMAGE
+    description: Reference of the spectral docker image
+  workspaces:
+  - name: source
   steps:
     - name: spectral
-      image: quay.io/maximilianb/spectral:latest
-      workingDir: /workspace/source-repo
+      image: $(params.IMAGE)
+      workingDir: $(workspaces.source.path)
       command:
         - spectral
       args:
         - lint
+        - $(params.API_PATH)
         - --ruleset
-        - /workspace/.spectral.yaml
+        - $(params.RULES_PATH)
       volumeMounts:
         - name: workspace
           mountPath: /workspace

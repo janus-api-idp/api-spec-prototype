@@ -46,10 +46,3 @@ spec:
       value: $(params.api-path)
     - name: IMAGE
       value: $(params.image-reference)
-  - name: check-spectral-result
-    runAfter: ["run-spectral"]
-    taskRef:
-      name: check-spectral-result
-    workspaces:
-    - name: source
-      workspace: shared-data

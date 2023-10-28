@@ -21,4 +21,4 @@ spec:
         - sh
       args:
         - -c
-        - spectral lint $(params.API_PATH) --ruleset $(params.RULES_PATH) -o spectral-report.txt
+        - spectral lint $(params.API_PATH) --ruleset $(params.RULES_PATH)

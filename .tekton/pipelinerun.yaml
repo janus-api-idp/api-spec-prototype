@@ -5,7 +5,7 @@ metadata:
   namespace: tekton-tasks
 spec:
   pipelineRef:
-    name: clone-build-push
+    name: openapi-spec
   workspaces:
   - name: shared-data
     volumeClaimTemplate:
@@ -25,4 +25,4 @@ spec:
   - name: rules-path
     value: ./.spectral.yaml
   - name: api-path
-    value: ./openapi.yaml
+    value: ./valid-openapi.yaml

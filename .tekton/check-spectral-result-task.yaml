@@ -1,0 +1,27 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: check-spectral-result
+spec:
+  workspaces:
+  - name: source
+  steps:
+    - name: check-spectral-result
+      image: alpine:3.14
+      workingDir: $(workspaces.source.path)
+      command:
+        - sh
+      args:
+        - -c
+        - |
+          if grep -q "errors" spectral-report.txt; then
+            echo "Spectral found errors. Failing pipeline."
+          else
+            echo "Spectral passed. Continuing to the next task."
+          fi
+
+
+
+
+
+

@@ -6,6 +6,7 @@ spec:
   params:
   - name: RULES_PATH
     description: Path to the spectral rules for validation
+    default: ./.spectral.yaml
   - name: API_PATH
     description: Path to the api to validate
   - name: IMAGE
@@ -17,15 +18,7 @@ spec:
       image: $(params.IMAGE)
       workingDir: $(workspaces.source.path)
       command:
-        - spectral
+        - sh
       args:
-        - lint
-        - $(params.API_PATH)
-        - --ruleset
-        - $(params.RULES_PATH)
-      volumeMounts:
-        - name: workspace
-          mountPath: /workspace
-  volumes:
-    - name: workspace
-      emptyDir: {}
+        - -c
+        - spectral lint $(params.API_PATH) --ruleset $(params.RULES_PATH) -o spectral-report.txt

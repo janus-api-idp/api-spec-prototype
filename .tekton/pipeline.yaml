@@ -2,12 +2,10 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: openapi-spec
-
-apiVersion: tekton.dev/v1beta1
-kind: Pipeline
-metadata:
-  name: openapi-spec
+  namespace: tekton-tasks
 spec:
+  description: | 
+    This pipeline runs a spectral lint
   params:
   - name: repo-url
     type: string
@@ -35,15 +33,23 @@ spec:
     - name: output
       workspace: shared-data
   - name: run-spectral
+    runAfter: ["fetch-source"]
     taskRef:
-      name: spectral-task
+      name: spectral-quaility-gate
     workspaces:
     - name: source
       workspace: shared-data
-      params:
-      - name: RULES_PATH
-        value: $(params.rules-path)
-      - name: API_PATH
-        value: $(params.api-path)
-      - name: IMAGE
-        value: $(params.image-reference)
+    params:
+    - name: RULES_PATH
+      value: $(params.rules-path)
+    - name: API_PATH
+      value: $(params.api-path)
+    - name: IMAGE
+      value: $(params.image-reference)
+  - name: check-spectral-result
+    runAfter: ["run-spectral"]
+    taskRef:
+      name: check-spectral-result
+    workspaces:
+    - name: source
+      workspace: shared-data

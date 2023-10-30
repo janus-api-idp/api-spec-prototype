@@ -35,7 +35,7 @@ spec:
   - name: run-spectral
     runAfter: ["fetch-source"]
     taskRef:
-      name: spectral-quaility-gate
+      name: spectral-quality-gate
     workspaces:
     - name: source
       workspace: shared-data

@@ -1,7 +1,7 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
-  name: spectral-quaility-gate
+  name: spectral-quality-gate
 spec:
   params:
   - name: RULES_PATH

@@ -1,0 +1,28 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: spectral-lint
+  namespace: tekton-tasks
+spec:
+  pipelineRef:
+    name: openapi-spec
+  workspaces:
+  - name: shared-data
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+  params:
+  - name: repo-url
+    value: https://github.com/janus-api-idp/api-spec-prototype.git
+  - name: gitRevision
+    value: add-spectral-pipeline
+  - name: image-reference
+    value: quay.io/maximilianb/spectral:latest
+  - name: rules-path
+    value: ./.spectral.yaml
+  - name: api-path
+    value: ./valid-openapi.yaml

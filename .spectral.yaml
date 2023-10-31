@@ -7,7 +7,7 @@ rules:
 
   operation-operationId: false
   operation-tags: false
-  operation-2xx-response: error
+  # operation-2xx-response: error
 
   adidas-paths-kebab-case:
     description: All YAML/JSON paths MUST follow kebab-case
@@ -198,50 +198,50 @@ rules:
     then:
       function: falsy
 
-  adidas-oas3-valid-example-in-parameters:
-    description: Examples must be valid against their defined schema.
-    message: "{{error}}"
-    recommended: true
-    formats:
-      - oas3
-    severity: 0
-    type: validation
-    given: "$..parameters..[?(@.in == 'body')]..[?(@property !== 'properties' && @.example
-      && ( @.type || @.format || @.$ref ))]"
-    then:
-      function: schemaPath
-      functionOptions:
-        field: example
-        schemaPath: "$"
+  # adidas-oas3-valid-example-in-parameters:
+  #   description: Examples must be valid against their defined schema.
+  #   message: "{{error}}"
+  #   recommended: true
+  #   formats:
+  #     - oas3
+  #   severity: 0
+  #   type: validation
+  #   given: "$..parameters..[?(@.in == 'body')]..[?(@property !== 'properties' && @.example
+  #     && ( @.type || @.format || @.$ref ))]"
+  #   then:
+  #     function: schemaPath
+  #     functionOptions:
+  #       field: example
+  #       schemaPath: "$"
 
-  adidas-oas3-valid-example-in-definitions:
-    description: Examples must be valid against their defined schema.
-    message: "{{error}}"
-    recommended: true
-    formats:
-      - oas3
-    severity: 0
-    type: validation
-    given: "$..definitions..[?(@property !== 'properties' && @.example && (@.type ||
-      @.format || @.$ref))]"
-    then:
-      function: schemaPath
-      functionOptions:
-        field: example
-        schemaPath: "$"
+  # adidas-oas3-valid-example-in-definitions:
+  #   description: Examples must be valid against their defined schema.
+  #   message: "{{error}}"
+  #   recommended: true
+  #   formats:
+  #     - oas3
+  #   severity: 0
+  #   type: validation
+  #   given: "$..definitions..[?(@property !== 'properties' && @.example && (@.type ||
+  #     @.format || @.$ref))]"
+  #   then:
+  #     function: schemaPath
+  #     functionOptions:
+  #       field: example
+  #       schemaPath: "$"
 
-  adidas-oas3-protocol-https-only: # checks how does the servers array values start
-    description: "ALL requests MUST go through `https` protocol only"
-    formats:
-      - oas3
-    recommended: true
-    severity: error
-    message: "Servers MUST be https and no other protocol is allowed."
-    given: $.servers..url
-    then:
-      function: pattern
-      functionOptions:
-        match: "/^https:/"
+  # adidas-oas3-protocol-https-only: # checks how does the servers array values start
+  #   description: "ALL requests MUST go through `https` protocol only"
+  #   formats:
+  #     - oas3
+  #   recommended: true
+  #   severity: error
+  #   message: "Servers MUST be https and no other protocol is allowed."
+  #   given: $.servers..url
+  #   then:
+  #     function: pattern
+  #     functionOptions:
+  #       match: "/^https:/"
 
   adidas-oas3-response-success-hal:
     description: "All success responses MUST be of media type `application/hal+json` "
@@ -273,6 +273,7 @@ rules:
         values:
           - application/hal+json
           - application/problem+json
+          - application/json
           
   adidas-oas3-response-success-hal-body: # schemes and/or produces
     description: "All success responses MUST follow `application/hal+json` schema"

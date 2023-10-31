@@ -2,3 +2,54 @@ apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
   name: openapi-spec
+  namespace: tekton-tasks
+spec:
+  description: | 
+    This pipeline runs a spectral lint
+  params:
+  - name: repo-url
+    type: string
+  - name: gitRevision
+    type: string
+  - name: image-reference
+    type: string
+  - name: rules-path
+    type: string
+  - name: api-path
+    type: string
+  workspaces:
+  - name: shared-data
+  tasks:
+  - name: fetch-source
+    taskRef:
+      name: git-clone
+      kind: ClusterTask
+    params:
+    - name: url
+      value: $(params.repo-url)
+    - name: revision
+      value: "$(params.gitRevision)"
+    workspaces:
+    - name: output
+      workspace: shared-data
+  - name: run-spectral
+    runAfter: ["fetch-source"]
+    taskRef:
+      name: spectral-quality-gate
+    workspaces:
+    - name: source
+      workspace: shared-data
+    params:
+    - name: RULES_PATH
+      value: $(params.rules-path)
+    - name: API_PATH
+      value: $(params.api-path)
+    - name: IMAGE
+      value: $(params.image-reference)
+  - name: run-microcks-import
+    runAfter: ["run-spectral"]
+    taskRef:
+      name: microcks-import-task
+    workspaces:
+    - name: data
+      workspace: shared-data
